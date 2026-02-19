@@ -1,18 +1,19 @@
 import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6' 
+import { Product } from '../../types';
 
 type ProductListItemProps = {
-  id: number
-  onPress?: (id: number) => void
+  item: Product;
+  onPress?: (id: string) => void
 }
 
-const ProductListItem: React.FC<ProductListItemProps> = ({id, onPress}) => {
+const ProductListItem: React.FC<ProductListItemProps> = ({item, onPress}) => {
   return (
-    <TouchableOpacity style={styles.container} onPress={() => onPress?.(id)}>
+    <TouchableOpacity style={styles.container} onPress={() => onPress?.(item.id)}>
       <View style={{flex: 1}}>
-        <Text style={styles.label}>Nombre</Text>
-        <Text style={styles.productId}>ID: {id}</Text>
+        <Text style={styles.label}>{item.name}</Text>
+        <Text style={styles.productId}>ID: {item.id}</Text>
       </View>
       <FontAwesome6 name='chevron-right' iconStyle='solid' size={14} color='#888' />
     </TouchableOpacity>

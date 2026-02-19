@@ -1,19 +1,20 @@
-import { Text, StyleSheet, FlatList, ListRenderItem } from 'react-native'
+import { StyleSheet, FlatList, ListRenderItem } from 'react-native'
 import React, { useCallback } from 'react'
 import ProductListItem from './ProductListItem'
-import { View } from 'react-native'
-import { useProducts, Product } from './hooks/useProducts'
-import { NavigationProp, useNavigation } from '@react-navigation/native'
+import { Text, View } from 'react-native'
+import { useProducts } from './hooks/useProducts'
+import { useNavigation } from '@react-navigation/native'
 import { RootNav } from '../navigation'
+import { Product } from '../../types'
 
 const Inicio = () => {
   const navigation = useNavigation<RootNav>()
   const { products } = useProducts();
 
-  const onItemPress = useCallback((id: number) => navigation.navigate('Producto', { id }), [navigation])
+  const onItemPress = useCallback((id: string) => navigation.navigate('Producto', { id }), [navigation])
 
   const renderItem: ListRenderItem<Product> = useCallback(({ item }) => {
-    return <ProductListItem id={item} onPress={onItemPress} />
+    return <ProductListItem item={item} onPress={onItemPress} />
   }, [])
 
   const renderSeparator = useCallback(() => {
@@ -24,13 +25,17 @@ const Inicio = () => {
 
   return (
     <View style={styles.container}>
-      <FlatList<Product>
-        data={products}
-        renderItem={renderItem}
-        keyExtractor={(index)=>index.toString()}
-        contentContainerStyle={styles.list}
-        ItemSeparatorComponent={renderSeparator}
-      />
+      {products.length === 0 ? (
+        <Text style={styles.noProductsText}>No hay productos disponibles</Text>
+      ) : (
+        <FlatList<Product>
+          data={products}
+          renderItem={renderItem}
+          keyExtractor={(index)=>index.toString()}
+          contentContainerStyle={styles.list} 
+          ItemSeparatorComponent={renderSeparator}
+        />
+      )}
     </View>
   )
 }
@@ -50,5 +55,11 @@ const styles = StyleSheet.create({
   divider: {
     height: StyleSheet.hairlineWidth,
     backgroundColor: '#ccc',
+  },
+  noProductsText: {
+    fontSize: 16,
+    marginTop: 20,
+    color: '#666',
+    textAlign: 'center',
   }
 })

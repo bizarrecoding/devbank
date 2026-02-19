@@ -1,14 +1,24 @@
-import { useState, useEffect } from 'react'
-
-export type Product = number
+import { useState, useEffect } from 'react' 
+import { Product } from '../../../types'; 
+import { getBaseURL } from '../../../config/env';
+ 
+const baseUrl = getBaseURL();
 
 export const useProducts = () => {
-  const [products,setProducts] = useState<any>();
+  const [products,setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-    setTimeout(() => {
-      setProducts([1,2,3,4,5,6,7])
-    }, 1000);
+    const fetchProducts = async () => {
+      try { 
+        const response = await fetch(`${baseUrl}/bp/products`);
+        const data = await response.json() as { data: Product[] };
+        setProducts(data.data); 
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    };
+
+    fetchProducts();
   }, [])
 
   return { products };

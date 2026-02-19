@@ -1,16 +1,17 @@
-import { StyleProp, StyleSheet, Text, TouchableOpacity, ViewStyle } from 'react-native'
+import { StyleProp, StyleSheet, Text, TouchableOpacity, TouchableOpacityProps, ViewStyle } from 'react-native'
 import React from 'react' 
 
 type BaseButtonProps = React.PropsWithChildren<{
   variant?: 'primary' | 'secondary' | 'alert' | 'clear'
   title?: string
   style?: StyleProp<ViewStyle>
-}>
+  onPress: () => void
+}> & TouchableOpacityProps
 
-const Button: React.FC<BaseButtonProps> = ({ variant='primary', title, children, style }) => {
+const Button: React.FC<BaseButtonProps> = ({ variant='primary', title, children, style, onPress, ...rest }) => {
   return (
-    <TouchableOpacity style={[styles.button, styles[variant], style]}>
-      { title ? <Text style={styles.text}>{title}</Text> : children }
+    <TouchableOpacity style={[styles.button, styles[variant], style]} onPress={onPress} {...rest}>
+      { title ? <Text style={[styles.text, styles[variant]]}>{title}</Text> : children }
     </TouchableOpacity>
   )
 }
@@ -19,27 +20,29 @@ export default Button
 
 const styles = StyleSheet.create({
   button:{
-    padding: 10,
+    padding: 12,
+    marginVertical: 6,
     borderRadius: 5,
     alignItems: 'center',
     justifyContent: 'center',
   },
   primary: {
     backgroundColor: '#007bff',
+    color: '#fff',
   },
   secondary:{
     backgroundColor: '#cEcEcE',
+    color: '#000',
   },
   alert: {
     backgroundColor: '#d50708',
+    color: '#fff',
   },
   clear: {
     backgroundColor: 'transparent',
   },
   text:{
-    color: '#fff',
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: 'bold',
   }
-
 })
