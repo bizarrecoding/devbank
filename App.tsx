@@ -1,20 +1,41 @@
+import React from 'react';
+import {View} from 'react-native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+
+import Inicio from './src/screens/inicio';
+import Producto from './src/screens/producto';
+import Registro from './src/screens/registro';
+import HeaderTitle from './src/components/HeaderTitle';
+import { theme } from './src/components/theme';
 
 export default function App() {
+  if(!__DEV__){
+    return <View style={{flex: 1, backgroundColor: 'red'}} />
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <RootNavigator/>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+const Stack = createNativeStackNavigator()
+
+const RootNavigator = () => {
+  return (
+      <NavigationContainer theme={theme}>
+        <Stack.Navigator
+          initialRouteName='Inicio'
+          screenOptions={{
+            headerTitle: () => <HeaderTitle /> 
+          }}
+        >     
+          <Stack.Screen name='Inicio' component={Inicio} />
+          <Stack.Screen name='Registro' component={Registro} />
+          <Stack.Screen name='Producto' component={Producto} />
+        </Stack.Navigator>
+      </NavigationContainer>
+  )
+}
+
