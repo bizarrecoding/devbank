@@ -5,12 +5,12 @@ import { Product } from '../../types';
 
 type ProductListItemProps = {
   item: Product;
-  onPress?: (id: string) => void
+  onPress?: (product: Product) => void
 }
 
 const ProductListItem: React.FC<ProductListItemProps> = ({item, onPress}) => {
   return (
-    <TouchableOpacity style={styles.container} onPress={() => onPress?.(item.id)}>
+    <TouchableOpacity style={styles.container} onPress={() => onPress?.(item)}>
       <View style={{flex: 1}}>
         <Text style={styles.label}>{item.name}</Text>
         <Text style={styles.productId}>ID: {item.id}</Text>

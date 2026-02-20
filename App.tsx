@@ -1,8 +1,6 @@
 import React from 'react';
-import {View} from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
-import { StatusBar } from 'expo-status-bar';
 
 import Inicio from './src/screens/inicio';
 import Producto from './src/screens/producto';
@@ -11,13 +9,7 @@ import HeaderTitle from './src/components/HeaderTitle';
 import { theme } from './src/components/theme';
 
 export default function App() {
-  if(!__DEV__){
-    return <View style={{flex: 1, backgroundColor: 'red'}} />
-  }
-
-  return (
-    <RootNavigator/>
-  );
+  return <RootNavigator/>
 }
 
 const Stack = createNativeStackNavigator()

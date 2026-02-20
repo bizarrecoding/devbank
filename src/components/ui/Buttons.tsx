@@ -27,11 +27,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   primary: {
-    backgroundColor: '#007bff',
-    color: '#fff',
+    backgroundColor: '#ffdd04',
+    color: '#000',
   },
   secondary:{
-    backgroundColor: '#cEcEcE',
+    backgroundColor: '#dEdEdE',
     color: '#000',
   },
   alert: {
