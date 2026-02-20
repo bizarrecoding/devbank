@@ -9,13 +9,13 @@ type FormError = {
   [key in FormLabels]?: string
 }
 
-export const useForm = () => {
-  const [id, setId] = useState<string|undefined>("3246");
-  const [name, setName] = useState<string|undefined>("Producto de prueba");
-  const [description, setDescription] = useState<string|undefined>("Este es un producto de prueba para validar el formulario");
-  const [logo, setLogo] = useState<string|undefined>("some-logo.png");
-  const [releaseDate, setReleaseDate] = useState<string|undefined>("2026-03-03");
-  const [reviewDate, setReviewDate] = useState<string|undefined>("2027-03-03");
+export const useForm = (baseProduct?: Product) => {
+  const [id, setId] = useState<string|undefined>(baseProduct?.id);
+  const [name, setName] = useState<string|undefined>(baseProduct?.name);
+  const [description, setDescription] = useState<string|undefined>(baseProduct?.description);
+  const [logo, setLogo] = useState<string|undefined>(baseProduct?.logo);
+  const [releaseDate, setReleaseDate] = useState<string|undefined>(baseProduct?.date_release);
+  const [reviewDate, setReviewDate] = useState<string|undefined>(baseProduct?.date_revision);
   const [validated, setValidated] = useState(true)
   const [error, setError] = useState<FormError>({})
 
@@ -37,8 +37,8 @@ export const useForm = () => {
         return valid ? null : "El ID debe tener entre 3 y 10 caracteres"
       }
       case 'Nombre':{
-        const valid = betweenLength(value, 5, 100)
-        return valid ? null : "El nombre debe tener entre 5 y 100 caracteres"
+        const valid = betweenLength(value, 6, 100)
+        return valid ? null : "El nombre debe tener entre 6 y 100 caracteres"
       }
       case 'Descripción':{
         const valid = betweenLength(value, 10, 200)
@@ -61,7 +61,6 @@ export const useForm = () => {
 
   const setValue = useCallback((label: FormLabels, value: string) => {
     const error = validate(label, value);
-    console.log("🚀 ~ useForm ~ error:",label, value, error);
     if (!error) {
       switch (label) {
         case 'ID':
@@ -100,8 +99,8 @@ export const useForm = () => {
     setName(undefined);
     setDescription(undefined);
     setLogo(undefined);
-    // setReleaseDate(undefined);
-    // setReviewDate(undefined);
+    setReleaseDate(undefined);
+    setReviewDate(undefined);
     setError({});
   }, [])
 

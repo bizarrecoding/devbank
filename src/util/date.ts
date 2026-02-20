@@ -11,7 +11,6 @@ export const isFuture = (date: string) => {
 export const isAfterAYear = (releaseDate: string,revDate: string) => {
   if(!releaseDate || !revDate) return false;
   const release = new Date(releaseDate?.trim());
-  console.log("🚀 ~ isAfterAYear ~ releaseDate:", releaseDate);
   release.setHours(0,0,0,0);
   const followingYear = release.getFullYear();
   const nextRevision = release;
@@ -19,8 +18,6 @@ export const isAfterAYear = (releaseDate: string,revDate: string) => {
 
   const date = new Date(revDate?.trim());
   date.setHours(0,0,0,0);
-  console.log("🚀 ~ isAfterAYear ~ nextRevision:", nextRevision.getTime());
-  console.log("🚀 ~ isAfterAYear ~ date:", date.getTime());
   // if set hours to (0,0,0,0) the time should be the same for both dates
   return date.getTime() === nextRevision.getTime();
 }

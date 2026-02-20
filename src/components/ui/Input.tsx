@@ -3,16 +3,18 @@ import { StyleSheet, Text, TextInput, View } from 'react-native'
 
 type InputProps = {
   label: string; 
+  defaultValue?: string;
   setValue: (value: string) => void;
   error?: string;
 }
 
-export const Input = React.forwardRef<TextInput, InputProps>(({ label, setValue, error }, ref) => {   
+export const Input = React.forwardRef<TextInput, InputProps>(({ label, defaultValue, setValue, error }, ref) => {   
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{label}</Text>
       <TextInput
         ref={ref}
+        defaultValue={defaultValue}
         style={[styles.input, error && styles.inputError]} 
         onChangeText={setValue}  
       />

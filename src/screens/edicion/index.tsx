@@ -1,41 +1,33 @@
 import React from 'react'
-import { KeyboardAvoidingView, ScrollView, Text, StyleSheet, View, TextInput, Platform } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
+import { KeyboardAvoidingView, ScrollView, Text, StyleSheet, TextInput, Platform } from 'react-native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 
 import { Input } from '../../components/ui/Input'
-import Button from '../../components/ui/Buttons'
-import { useForm } from './hooks/useForm'
-import { useRegisterProduct } from './hooks/useRegisterProduct'
+import Button from '../../components/ui/Buttons' 
 import { Product } from '../../types'
 import BottomSheet from '../../components/ui/BottomSheet'
-import useModal from '../../components/ui/hooks/useModal' 
+import useModal from '../../components/ui/hooks/useModal'
+import { useForm } from '../registro/hooks/useForm'
+import { useUpdateProduct } from './hooks/useUpdateProduct'
+import { RootNav } from '../navigation'
 
-const Registro = () => {
-  const navigation = useNavigation();
-  const { product, error, setValue, reset } = useForm();
-  const {onSubmit} = useRegisterProduct()
+const Edicion = () => {
+  const route = useRoute();
+  const navigation = useNavigation<RootNav>();
+  const item = route?.params as Product; 
+  const { product, error, setValue } = useForm(item);
+  const {onSubmitUpdate} =  useUpdateProduct()
   const { visible, toggle } = useModal();
-  const idRef = React.createRef<TextInput>();
   const nameRef = React.createRef<TextInput>();
   const descRef = React.createRef<TextInput>();
   const imageRef = React.createRef<TextInput>();
   const releaseDateRef = React.createRef<TextInput>();
   const reviewDateRef = React.createRef<TextInput>();
   const scrollRef = React.createRef<ScrollView>();
-
-  const onReset = () => {
-    reset();
-    idRef?.current?.clear();
-    nameRef?.current?.clear();
-    descRef?.current?.clear();
-    imageRef?.current?.clear();
-    releaseDateRef?.current?.clear();
-    reviewDateRef?.current?.clear();
-  }
+ 
   const handleSubmit = async () => {
-    const response = await onSubmit(product as Product);
+    const response = await onSubmitUpdate(product as Product);
     if(response.ok) {
-      onReset();
       navigation.goBack();
     } else {
       toggle();
@@ -44,58 +36,54 @@ const Registro = () => {
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
       <ScrollView keyboardShouldPersistTaps="handled" style={styles.scrollView} ref={scrollRef}>
-        <Text style={styles.title}>Formulario de Registro</Text>
-        <Input 
-          label="ID"  
-          ref={idRef}
-          setValue={(value) => setValue('ID', value)} 
-          error={error?.ID} 
-        />
+        <Text style={styles.title}>Actualización de producto</Text>
+        <Text style={styles.subtitle}>ID: {product.id}</Text>
         <Input 
           label="Nombre"   
           ref={nameRef}
+          defaultValue={item.name}
           setValue={(value) => setValue('Nombre', value)} 
           error={error?.Nombre} 
         />
         <Input 
           label="Descripción"   
           ref={descRef}
+          defaultValue={item.description}
           setValue={(value) => setValue('Descripción', value)} 
           error={error?.['Descripción']} 
         />
         <Input 
           label="Imagen"  
           ref={imageRef}
+          defaultValue={item.logo}
           setValue={(value) => setValue('Imagen', value)} 
           error={error?.Imagen} 
         />
         <Input 
           label="Fecha de Liberación"   
           ref={releaseDateRef }
+          defaultValue={item.date_release}
           setValue={(value) => setValue('Fecha de Liberación', value)} 
           error={error?.['Fecha de Liberación']}
         />
         <Input 
           label="Fecha de Revisión"  
           ref={reviewDateRef}
+          defaultValue={item.date_revision}
           setValue={(value) => setValue('Fecha de Revisión', value)} 
           error={error?.['Fecha de Revisión']} 
         />
 
-        <Button title="Enviar" onPress={handleSubmit} style={{ marginTop: 16 }} />
-        <Button variant="secondary" title="Reiniciar" onPress={onReset} style={{ marginTop: 16 }} />
+        <Button title="Actualizar" onPress={handleSubmit} style={{ marginTop: 16 }} /> 
         <BottomSheet visible={visible} toggleVisibility={toggle}>
-          <View style={{ marginBottom: 16, justifyContent: 'center' }}>
-            <Text style={styles.errorText}>Hubo un error al registrar el producto, por favor inténtelo de nuevo.</Text>
-            <Button title='Cerrar' onPress={toggle} style={{ marginTop: 16 }} />
-          </View>
+          <Text>Hubo un error al actualizar el producto, por favor inténtelo de nuevo.</Text>
         </BottomSheet>
       </ScrollView>
     </KeyboardAvoidingView>
   )
 }
 
-export default Registro
+export default Edicion 
 
 const styles = StyleSheet.create({
   container: {
@@ -108,9 +96,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginVertical: 16,
   },
-  errorText: { 
+  subtitle: {
     fontSize: 14,
-    textAlign: 'center',
-    marginVertical: 16,
-  }
+    fontWeight: 'bold',
+    marginBottom: 16,
+  },
 })

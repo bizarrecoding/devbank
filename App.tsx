@@ -2,10 +2,11 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 
+import HeaderTitle from './src/components/HeaderTitle';
 import Inicio from './src/screens/inicio';
 import Producto from './src/screens/producto';
 import Registro from './src/screens/registro';
-import HeaderTitle from './src/components/HeaderTitle';
+import Edicion from './src/screens/edicion';
 import { theme } from './src/components/theme';
 
 export default function App() {
@@ -26,6 +27,7 @@ const RootNavigator = () => {
           <Stack.Screen name='Inicio' component={Inicio} />
           <Stack.Screen name='Registro' component={Registro} />
           <Stack.Screen name='Producto' component={Producto} />
+          <Stack.Screen name='Edicion' component={Edicion} />
         </Stack.Navigator>
       </NavigationContainer>
   )
