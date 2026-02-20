@@ -1,25 +1,27 @@
-import { KeyboardAvoidingView, ScrollView, Text, StyleSheet, TextInput } from 'react-native'
-import React, { useState } from 'react'
+import React from 'react'
+import { KeyboardAvoidingView, ScrollView, Text, StyleSheet, TextInput, Platform } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
+
 import { Input } from '../../components/ui/Input'
 import Button from '../../components/ui/Buttons'
 import { useForm } from './hooks/useForm'
 import { useRegisterProduct } from './hooks/useRegisterProduct'
 import { Product } from '../../types'
 import BottomSheet from '../../components/ui/BottomSheet'
-import { useNavigation } from '@react-navigation/native'
+import useModal from '../../components/ui/hooks/useModal'
 
 const Registro = () => {
   const navigation = useNavigation();
   const { product, error, setValue, reset } = useForm();
   const {onSubmit} = useRegisterProduct()
-  const [showModal, setShowModal] = useState(false)
+  const { visible, toggle } = useModal();
   const idRef = React.createRef<TextInput>();
   const nameRef = React.createRef<TextInput>();
   const descRef = React.createRef<TextInput>();
   const imageRef = React.createRef<TextInput>();
   const releaseDateRef = React.createRef<TextInput>();
   const reviewDateRef = React.createRef<TextInput>();
-  
+  const scrollRef = React.createRef<ScrollView>();
 
   const onReset = () => {
     reset();
@@ -36,12 +38,12 @@ const Registro = () => {
       onReset();
       navigation.goBack();
     } else {
-      setShowModal(true);
+      toggle();
     }
   } 
   return (
-    <KeyboardAvoidingView behavior="padding" style={styles.container}>
-      <ScrollView keyboardShouldPersistTaps="handled" style={styles.scrollView}>
+    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
+      <ScrollView keyboardShouldPersistTaps="handled" style={styles.scrollView} ref={scrollRef}>
         <Text style={styles.title}>Formulario de Registro</Text>
         <Input 
           label="ID"  
@@ -51,38 +53,38 @@ const Registro = () => {
         />
         <Input 
           label="Nombre"   
-          ref={null}
+          ref={nameRef}
           setValue={(value) => setValue('Nombre', value)} 
           error={error?.Nombre} 
         />
         <Input 
           label="Descripción"   
-          ref={null}
+          ref={descRef}
           setValue={(value) => setValue('Descripción', value)} 
           error={error?.['Descripción']} 
         />
         <Input 
           label="Imagen"  
-          ref={null}
+          ref={imageRef}
           setValue={(value) => setValue('Imagen', value)} 
           error={error?.Imagen} 
         />
         <Input 
           label="Fecha de Liberación"   
-          ref={null}
+          ref={releaseDateRef }
           setValue={(value) => setValue('Fecha de Liberación', value)} 
-          error={error?.['Fecha de Liberación']} 
+          error={error?.['Fecha de Liberación']}
         />
         <Input 
           label="Fecha de Revisión"  
-          ref={null}
+          ref={reviewDateRef}
           setValue={(value) => setValue('Fecha de Revisión', value)} 
           error={error?.['Fecha de Revisión']} 
         />
 
         <Button title="Enviar" onPress={handleSubmit} style={{ marginTop: 16 }} />
         <Button variant="secondary" title="Reiniciar" onPress={onReset} style={{ marginTop: 16 }} />
-        <BottomSheet visible={showModal} toggleVisibility={() => setShowModal(s=>!s)}>
+        <BottomSheet visible={visible} toggleVisibility={toggle}>
           <Text>Hubo un error al registrar el producto, por favor inténtelo de nuevo.</Text>
         </BottomSheet>
       </ScrollView>
