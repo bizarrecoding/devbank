@@ -5,4 +5,5 @@ export type RootNav = NavigationProp<{
   Inicio: undefined
   Registro: undefined
   Producto: Product
+  Edicion: Product
 }>

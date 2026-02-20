@@ -1,16 +1,33 @@
 import React, { useState } from 'react'
 import { StyleSheet, Text, View, Image } from 'react-native'
-import { useRoute } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 
 import { Product } from '../../types'
 import Button from '../../components/ui/Buttons'
 import BottomSheet from '../../components/ui/BottomSheet'
 import useModal from '../../components/ui/hooks/useModal'
+import { useDeleteProduct } from './hooks/useDeleteProduct'
+import { RootNav } from '../navigation'
 
 const Producto = () => {
   const route = useRoute();
+  const navigation = useNavigation<RootNav>();
   const { visible, toggle } = useModal();
   const item = route?.params as Product; 
+  const { onDelete } = useDeleteProduct()
+
+  const handleDelete = async () => {
+    const response = await onDelete(item);
+    if(response.ok) {
+      toggle(); 
+      navigation.goBack()
+    }
+  }
+
+  const handleEdit = () => {
+    navigation.navigate('Edicion', item)
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>ID: {item.id}</Text>
@@ -22,13 +39,13 @@ const Producto = () => {
         <ProductRow label='Fecha de liberación' value={item.date_release} />
         <ProductRow label='Fecha de revisión' value={item.date_revision} />
       </View>
-      <Button variant='secondary' title='Editar' onPress={() => {}} />
+      <Button variant='secondary' title='Editar' onPress={handleEdit} />
       <Button variant='alert' title='Eliminar' onPress={toggle} />
       <BottomSheet visible={visible} toggleVisibility={toggle}>
         <>
           <Text style={styles.message}>¿Estás seguro de eliminar el producto {item.name}?</Text>
           <View style={{ width: '100%' }}>
-            <Button title='confirmar' onPress={toggle} />
+            <Button title='confirmar' onPress={handleDelete} />
             <Button variant='secondary' title='Cancelar' onPress={toggle} />
           </View>
         </>
@@ -49,7 +66,11 @@ const ProductRow: React.FC<ProductRowProps> = ({label, value, image, asColumn}) 
   return (
     <View style={[styles.row, asColumn ? styles.column : null]}>
       <Text style={styles.label}>{label}</Text>
-      {image ? <Image style={styles.image} source={{ uri: image }} /> : <Text style={styles.value}>{value}</Text>}
+      {image ? (
+        <Image style={styles.image} source={{ uri: image }} /> 
+      ) : (
+        <Text style={styles.value}>{value}</Text>
+      )}
     </View>
   )
 }
@@ -90,10 +111,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   image: {
-    width: 100,
-    height: 100,
-    borderWidth: 1,
-    borderColor: '#ccc',
+    width: "100%",
+    height: 200,
     resizeMode: 'contain',
     alignSelf: 'center',
   },
