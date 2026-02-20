@@ -4,19 +4,21 @@ import { StyleSheet, Text, TextInput, View } from 'react-native'
 type InputProps = {
   label: string; 
   defaultValue?: string;
+  disabled?: boolean;
   setValue: (value: string) => void;
   error?: string;
 }
 
-export const Input = React.forwardRef<TextInput, InputProps>(({ label, defaultValue, setValue, error }, ref) => {   
+export const Input = React.forwardRef<TextInput, InputProps>(({ label, defaultValue, disabled, setValue, error }, ref) => {   
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{label}</Text>
       <TextInput
         ref={ref}
         defaultValue={defaultValue}
-        style={[styles.input, error && styles.inputError]} 
+        style={[styles.input, error && styles.inputError, disabled && styles.inputDisabled]} 
         onChangeText={setValue}  
+        editable={!disabled}
       />
       {error && <Text style={styles.error}>{error}</Text>} 
     </View>
@@ -38,6 +40,10 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 12,
     marginVertical: 8,
+  },
+  inputDisabled: {
+    backgroundColor: '#f0f0f0',
+    borderColor: '#ddd',
   },
   inputError: {
     borderColor: 'red',

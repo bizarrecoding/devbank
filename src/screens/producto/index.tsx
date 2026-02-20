@@ -25,7 +25,7 @@ const Producto = () => {
   }
 
   const handleEdit = () => {
-    navigation.navigate('Edicion', item)
+    navigation.navigate('Registro', item)
   }
 
   return (

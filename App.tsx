@@ -6,7 +6,6 @@ import HeaderTitle from './src/components/HeaderTitle';
 import Inicio from './src/screens/inicio';
 import Producto from './src/screens/producto';
 import Registro from './src/screens/registro';
-import Edicion from './src/screens/edicion';
 import { theme } from './src/components/theme';
 
 export default function App() {
@@ -27,7 +26,6 @@ const RootNavigator = () => {
           <Stack.Screen name='Inicio' component={Inicio} />
           <Stack.Screen name='Registro' component={Registro} />
           <Stack.Screen name='Producto' component={Producto} />
-          <Stack.Screen name='Edicion' component={Edicion} />
         </Stack.Navigator>
       </NavigationContainer>
   )

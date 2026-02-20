@@ -3,7 +3,6 @@ import { Product } from "../types"
 
 export type RootNav = NavigationProp<{
   Inicio: undefined
-  Registro: undefined
+  Registro?: Product
   Producto: Product
-  Edicion: Product
 }>
