@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react'
 import { Product } from '../../../types';
 import { isAfterAYear, isDate, isFuture } from '../../../util/date';
 import { betweenLength } from '../../../util/strings';
+import { useUniqueId } from './useUniqueId';
 
 type FormLabels = 'ID' | 'Nombre' | 'Descripción' | 'Imagen' | 'Fecha de Liberación' | 'Fecha de Revisión';
 
@@ -10,6 +11,7 @@ type FormError = {
 }
 
 export const useForm = (baseProduct?: Product) => {
+  const idExist = useUniqueId();
   const [id, setId] = useState<string|undefined>(baseProduct?.id);
   const [name, setName] = useState<string|undefined>(baseProduct?.name);
   const [description, setDescription] = useState<string|undefined>(baseProduct?.description);
@@ -30,11 +32,14 @@ export const useForm = (baseProduct?: Product) => {
     }
   }, [id, name, description, logo, releaseDate, reviewDate])
 
-  const validate = useCallback((label: FormLabels, value: string) => {
+  const validate = useCallback(async (label: FormLabels, value: string) => {
     switch(label) {
       case 'ID':{
         const valid = betweenLength(value, 3, 10)
-        return valid ? null : "El ID debe tener entre 3 y 10 caracteres"
+        if(!valid) return "El ID debe tener entre 3 y 10 caracteres"
+        const exists = await idExist(value);
+        if(exists) return "El ID ya existe"
+        return null;
       }
       case 'Nombre':{
         const valid = betweenLength(value, 6, 100)
@@ -59,8 +64,8 @@ export const useForm = (baseProduct?: Product) => {
     }
   },[product?.date_release])
 
-  const setValue = useCallback((label: FormLabels, value: string) => {
-    const error = validate(label, value);
+  const setValue = useCallback(async (label: FormLabels, value: string) => {
+    const error = await validate(label, value);
     if (!error) {
       switch (label) {
         case 'ID':
