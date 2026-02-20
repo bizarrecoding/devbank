@@ -20,7 +20,7 @@ export default SearchBar
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
+    paddingVertical: 16,
   },
   input: {
     borderWidth: 1,

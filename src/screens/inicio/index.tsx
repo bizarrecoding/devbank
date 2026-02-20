@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   list:{
     borderWidth: 1,
     borderColor: '#ccc',
-    borderRadius: 16,
+    borderRadius: 8,
   },
   divider: {
     height: StyleSheet.hairlineWidth,
