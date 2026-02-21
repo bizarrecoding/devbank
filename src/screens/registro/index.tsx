@@ -1,25 +1,25 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { KeyboardAvoidingView, ScrollView, Text, StyleSheet, View, TextInput, Platform } from 'react-native'
 import { useNavigation, useRoute } from '@react-navigation/native'
 
 import { Input } from '../../components/ui/Input'
 import Button from '../../components/ui/Buttons'
-import { useForm } from './hooks/useForm'
-import { useRegisterProduct } from './hooks/useRegisterProduct'
+import { FormLabels, useForm } from './hooks/useForm'
 import { Product } from '../../types'
 import BottomSheet from '../../components/ui/BottomSheet'
 import useModal from '../../components/ui/hooks/useModal' 
 import { RootNav } from '../navigation'
-import { useUpdateProduct } from './hooks/useUpdateProduct'
+import useRegisterProduct from './hooks/useRegisterProduct'
+import useUpdateProduct from './hooks/useUpdateProduct'
 
-const Registro = () => {
+const Registro = () => { 
   const route = useRoute();
   const navigation = useNavigation<RootNav>();
-  const item = route?.params as Product; 
+  const item = route?.params as Product;  
   const isEdit = !!item?.id;
-  const { product, error, setValue, reset } = useForm(item);
+  const { product, validateProduct, error, setValue, reset } = useForm(item);
   const {onSubmit} = useRegisterProduct()
-  const {onSubmitUpdate} =  useUpdateProduct()
+  const {onSubmitUpdate} = useUpdateProduct()
   const { visible, toggle } = useModal();
   const idRef = React.createRef<TextInput>();
   const nameRef = React.createRef<TextInput>();
@@ -39,6 +39,9 @@ const Registro = () => {
     reviewDateRef?.current?.clear();
   }
   const handleSubmit = async () => {
+    const valid = await validateProduct(product)
+    console.log("🚀 ~ handleSubmit ~ valid:", product,valid);
+    if(!valid) return toggle()
     let response = null
     if(isEdit) { 
       response = await onSubmitUpdate(product as Product);
@@ -58,6 +61,7 @@ const Registro = () => {
       <ScrollView keyboardShouldPersistTaps="handled" style={styles.scrollView} ref={scrollRef}>
         <Text style={styles.title}>Formulario de Registro</Text>
         <Input 
+          testID="FORM_ID"
           label="ID"  
           ref={idRef}
           defaultValue={item?.id}

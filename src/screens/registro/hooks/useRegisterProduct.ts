@@ -4,7 +4,7 @@ import { getBaseURL } from '../../../config/env';
 
 const baseUrl = getBaseURL();
 
-export const useRegisterProduct = () => { 
+const useRegisterProduct = () => { 
   const onSubmit = useCallback(async (product: Product) => {
     try { 
       const response = await fetch(`${baseUrl}/bp/products`, {
@@ -21,3 +21,5 @@ export const useRegisterProduct = () => {
   },[]) 
   return { onSubmit };
 }
+
+export default useRegisterProduct

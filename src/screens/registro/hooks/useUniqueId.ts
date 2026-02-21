@@ -1,10 +1,9 @@
-import { useCallback } from 'react' 
-import { Product } from '../../../types'; 
+import { useCallback } from 'react'  
 import { getBaseURL } from '../../../config/env';
 
 const baseUrl = getBaseURL();
 
-export const useUniqueId = () => { 
+const useUniqueId = () => { 
   const idExist = useCallback(async (id: string) => {
     try { 
       const response = await fetch(`${baseUrl}/bp/products/verification/${id}`);
@@ -12,8 +11,10 @@ export const useUniqueId = () => {
       const data = await response.json() as boolean;
       return data;
     } catch (error) { 
-      return { ok: false, status: 500 };
+      return true;
     }
   },[]) 
   return idExist;
 }
+
+export default useUniqueId

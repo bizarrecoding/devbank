@@ -4,7 +4,7 @@ import { getBaseURL } from '../../../config/env';
 
 const baseUrl = getBaseURL();
 
-export const useUpdateProduct = () => { 
+const useUpdateProduct = () => { 
   const onSubmitUpdate = useCallback(async (product: Product) => {
     try { 
       const {id, ...data} = product
@@ -22,3 +22,5 @@ export const useUpdateProduct = () => {
   },[]) 
   return { onSubmitUpdate };
 }
+
+export default useUpdateProduct
