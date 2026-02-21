@@ -4,7 +4,7 @@ import { useNavigation, useRoute } from '@react-navigation/native'
 
 import { Input } from '../../components/ui/Input'
 import Button from '../../components/ui/Buttons'
-import { FormLabels, useForm } from './hooks/useForm'
+import { useForm } from './hooks/useForm'
 import { Product } from '../../types'
 import BottomSheet from '../../components/ui/BottomSheet'
 import useModal from '../../components/ui/hooks/useModal' 
@@ -40,12 +40,11 @@ const Registro = () => {
   }
   const handleSubmit = async () => {
     const valid = await validateProduct(product)
-    console.log("🚀 ~ handleSubmit ~ valid:", product,valid);
     if(!valid) return toggle()
     let response = null
     if(isEdit) { 
       response = await onSubmitUpdate(product as Product);
-    }else{
+    } else {
       response = await onSubmit(product as Product);
     }
     if(response?.ok) {
@@ -70,6 +69,7 @@ const Registro = () => {
           error={error?.ID} 
         />
         <Input 
+          testID="FORM_NAME"
           label="Nombre"
           ref={nameRef}
           defaultValue={item?.name}
@@ -77,6 +77,7 @@ const Registro = () => {
           error={error?.Nombre} 
         />
         <Input 
+          testID="FORM_DESC"
           label="Descripción"   
           ref={descRef}
           defaultValue={item?.description}
@@ -84,6 +85,7 @@ const Registro = () => {
           error={error?.['Descripción']} 
         />
         <Input 
+          testID="FORM_LOGO"
           label="Imagen"  
           ref={imageRef}
           defaultValue={item?.logo}
@@ -91,6 +93,7 @@ const Registro = () => {
           error={error?.Imagen} 
         />
         <Input 
+          testID="FORM_RELEASE"
           label="Fecha de Liberación"   
           ref={releaseDateRef}
           defaultValue={item?.date_release}
@@ -98,15 +101,17 @@ const Registro = () => {
           error={error?.['Fecha de Liberación']}
         />
         <Input 
+          testID="FORM_REVISION"
           label="Fecha de Revisión"  
           ref={reviewDateRef}
           defaultValue={item?.date_revision}
+          placeholder=""
           setValue={(value) => setValue('Fecha de Revisión', value)} 
           error={error?.['Fecha de Revisión']} 
         />
 
         <Button title="Enviar" onPress={handleSubmit} style={{ marginTop: 16 }} />
-        {!isEdit && <Button variant="secondary" title="Reiniciar" onPress={onReset} style={{ marginTop: 16 }} />}
+        {!isEdit && <Button testID="FORM_RESET" variant="secondary" title="Reiniciar" onPress={onReset} style={{ marginTop: 16 }} />}
         <BottomSheet visible={visible} toggleVisibility={toggle}>
           <View style={{ marginBottom: 16, justifyContent: 'center' }}>
             <Text style={styles.errorText}>Hubo un error al registrar el producto, por favor inténtelo de nuevo.</Text>

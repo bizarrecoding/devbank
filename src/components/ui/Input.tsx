@@ -8,15 +8,17 @@ type InputProps = {
   setValue: (value: string) => void;
   error?: string|null;
   testID?: string;
+  placeholder?: string
 }
 
-export const Input = React.forwardRef<TextInput, InputProps>(({ label, defaultValue, disabled, setValue, error, testID }, ref) => {   
+export const Input = React.forwardRef<TextInput, InputProps>(({ label, defaultValue, disabled, setValue, error, testID, placeholder }, ref) => {   
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{label}</Text>
       <TextInput
         testID={testID}
         ref={ref}
+        placeholder={placeholder}
         defaultValue={defaultValue}
         style={[styles.input, error && styles.inputError, disabled && styles.inputDisabled]} 
         onChangeText={setValue}  
