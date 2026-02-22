@@ -13,7 +13,7 @@ type FormError = {
 export const FormError = {
   INVALID_ID: "El ID debe tener entre 3 y 10 caracteres",
   DUPLICATE_ID: "El ID ya existe",
-  INVALID_NAME: "El nombre debe tener entre 6 y 100 caracteres",
+  INVALID_NAME: "El nombre debe tener entre 5 y 100 caracteres",
   INVALID_DESC:"La descripción debe tener entre 10 y 200 caracteres",
   INVALID_LOGO: "La imagen es requerida",
   RELEASE_PAST: "La fecha de liberación debe ser una fecha futura",
@@ -53,7 +53,7 @@ export const useForm = (baseProduct?: Product) => {
         return null;
       }
       case 'Nombre':{
-        const valid = betweenLength(value, 6, 100)
+        const valid = betweenLength(value, 5, 100)
         return valid ? null : FormError.INVALID_NAME
       }
       case 'Descripción':{
